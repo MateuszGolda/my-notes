@@ -6,6 +6,8 @@ function main() {
 
 function deleteDiv() {
     this.parentNode.parentNode.removeChild(this.parentNode);
+    delete notes[this.parentNode.id];
+    localStorage.setItem('notes', JSON.stringify(notes));
 }
 
 function loadLocalStorageNotes() {
@@ -16,7 +18,7 @@ function loadLocalStorageNotes() {
     }
 }
 
-function addNote({title = "Title", content = "content"} = {}) {
+function addNote({title = "Empty note", content = ""} = {}) {
     let noteId = "note" + count;
     notes[noteId] = {};
     const div = document.createElement("div");
@@ -43,8 +45,6 @@ function addNote({title = "Title", content = "content"} = {}) {
     div.appendChild(textarea);
     textarea.addEventListener('input', saveNoteToLocalStorage);
 
-    // saveNoteToLocalStorage(h2);
-    // saveNoteToLocalStorage(textarea);
     count++;
 }
 
@@ -54,9 +54,7 @@ function saveNoteToLocalStorage() {
     let value = propertyName === "H2" ? this.innerHTML : this.value;
     notes[noteId][propertyName] = value;
 
-    let stringNotes = JSON.stringify(notes);
-    localStorage.setItem('notes', stringNotes);
-    console.log('');
+    localStorage.setItem('notes', JSON.stringify(notes));
 }
 
 let notes = {};
