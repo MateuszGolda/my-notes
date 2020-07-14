@@ -45,7 +45,7 @@ button:active {
     color: #d5d5d5;
 }
 
-.note label textarea {
+.note textarea {
     display: block;
     min-width: 150px;
     min-height: 30px;
