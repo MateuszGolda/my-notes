@@ -11,16 +11,20 @@ function deleteDiv() {
 function loadLocalStorageNotes() {
     let parsedNotes = JSON.parse(localStorage.getItem('notes'));
     for (let note in parsedNotes) {
-        addNote({title: parsedNotes[note].title, content: parsedNotes[note].content});
+        let a = {title: parsedNotes[note].H2, content: parsedNotes[note].TEXTAREA};
+        addNote(a);
     }
 }
 
 function addNote({title = "Title", content = "content"} = {}) {
+    let noteId = "note" + count;
+    notes[noteId] = {};
     const div = document.createElement("div");
     div.setAttribute("class", "note");
-    div.setAttribute("id", "note" + count++);
-    document.querySelector(".container").appendChild(div);
+    div.setAttribute("id", "note" + count);
+    document.querySelector(".notes").appendChild(div);
 
+    notes[noteId].H2 = title;
     const h2 = document.createElement("h2");
     h2.setAttribute("class", "note-title");
     h2.setAttribute("contenteditable", "true");
@@ -33,24 +37,28 @@ function addNote({title = "Title", content = "content"} = {}) {
     div.appendChild(button);
     button.addEventListener('click', deleteDiv);
 
-    const label = document.createElement("label");
-    div.appendChild(label);
-
+    notes[noteId].TEXTAREA = content;
     const textarea = document.createElement("textarea");
     textarea.innerText = content;
-    label.appendChild(textarea);
+    div.appendChild(textarea);
     textarea.addEventListener('input', saveNoteToLocalStorage);
+
+    // saveNoteToLocalStorage(h2);
+    // saveNoteToLocalStorage(textarea);
+    count++;
 }
 
 function saveNoteToLocalStorage() {
-    let noteId = this.parentNode.getAttribute("id");
-    let propertyName = this.getAttribute("nodeName");
-    let value = this.getAttribute("innerText");
-    alert(noteId + ' ' + propertyName + ' ' + value);
-    // notes[noteId][propertyName] = value;
-    // localStorage.setItem('notes', JSON.stringify(notes));
+    let noteId = this.parentNode.id;
+    let propertyName = this.nodeName;
+    let value = propertyName === "H2" ? this.innerHTML : this.value;
+    notes[noteId][propertyName] = value;
+
+    let stringNotes = JSON.stringify(notes);
+    localStorage.setItem('notes', stringNotes);
+    console.log('');
 }
 
-let notes;
+let notes = {};
 let count = 0;
 main();
