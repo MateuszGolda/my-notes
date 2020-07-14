@@ -3,7 +3,8 @@ body {
 }
 
 .notes {
-
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .note {
